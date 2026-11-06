@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}محمص وبن العطار{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container header-flex">
+            <div class="logo">
+                <a href="{{ url_for('index') }}" style="color:#f4d03f;text-decoration:none">
+                    <h1>🌿 محمص وبن العطار</h1>
+                </a>
+            </div>
+            <nav class="main-nav">
+                <a href="{{ url_for('index') }}">الرئيسية</a>
+                <a href="{{ url_for('cart') }}">
+                    🛒 السلة
+                    {% if cart_count > 0 %}
+                    <span class="cart-badge">{{ cart_count }}</span>
+                    {% endif %}
+                </a>
+                <a href="{{ url_for('about') }}">من نحن</a>
+                <a href="{{ url_for('contact') }}">اتصل بنا</a>
+                <a href="{{ url_for('admin_login') }}" class="admin-link">لوحة التحكم</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content-area">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>جميع الحقوق محفوظة © 2026 - محمص وبن العطار</p>
+        </div>
+    </footer>
+</body>
+</html>

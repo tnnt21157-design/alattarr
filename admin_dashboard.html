@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}لوحة التحكم{% endblock %}
+{% block content %}
+<div class="admin-layout">
+    <aside class="admin-sidebar">
+        <a href="{{ url_for('admin_dashboard') }}" class="active">📊 الرئيسية</a>
+        <a href="{{ url_for('admin_products') }}">📦 المنتجات</a>
+        <a href="{{ url_for('admin_offers') }}">🔥 العروض</a>
+        <a href="{{ url_for('admin_product_add') }}">➕ إضافة منتج</a>
+        <hr style="border:none; border-top:1px solid #eee; margin:12px 0;">
+        <a href="{{ url_for('index') }}">🌐 عرض الموقع</a>
+        <a href="{{ url_for('admin_logout') }}" style="color:#c0392b;">🚪 تسجيل الخروج</a>
+    </aside>
+
+    <div class="admin-content">
+        <h2 style="margin-top:0; color:#0d3b22;">مرحباً {{ session.get('admin_user', '') }}</h2>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="num">{{ stats.categories }}</div>
+                <div class="label">أقسام</div>
+            </div>
+            <div class="stat-card">
+                <div class="num">{{ stats.products }}</div>
+                <div class="label">منتجات</div>
+            </div>
+            <div class="stat-card">
+                <div class="num">{{ stats.active_products }}</div>
+                <div class="label">نشطة</div>
+            </div>
+            <div class="stat-card">
+                <div class="num">{{ stats.offers }}</div>
+                <div class="label">عروض</div>
+            </div>
+        </div>
+
+        <h3 style="color:#0d3b22;">الأقسام</h3>
+        <div class="grid-container" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));">
+            {% for cat in categories %}
+            <div class="card" style="padding:14px;">
+                <h4 style="font-size:1rem;">{{ cat.icon }} {{ cat.title }}</h4>
+                <a href="{{ url_for('admin_products', cat=cat.key) }}" class="btn-sm">عرض المنتجات</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

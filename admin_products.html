@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}إدارة المنتجات{% endblock %}
+{% block content %}
+<div class="admin-layout">
+    <aside class="admin-sidebar">
+        <a href="{{ url_for('admin_dashboard') }}">📊 الرئيسية</a>
+        <a href="{{ url_for('admin_products') }}" class="active">📦 المنتجات</a>
+        <a href="{{ url_for('admin_offers') }}">🔥 العروض</a>
+        <a href="{{ url_for('admin_product_add') }}">➕ إضافة منتج</a>
+        <hr style="border:none; border-top:1px solid #eee; margin:12px 0;">
+        <a href="{{ url_for('index') }}">🌐 عرض الموقع</a>
+        <a href="{{ url_for('admin_logout') }}" style="color:#c0392b;">🚪 تسجيل الخروج</a>
+    </aside>
+
+    <div class="admin-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
+            <h2 style="margin:0; color:#0d3b22;">المنتجات</h2>
+            <a href="{{ url_for('admin_product_add') }}" class="btn">➕ إضافة منتج</a>
+        </div>
+
+        <div class="filter-bar">
+            <a href="{{ url_for('admin_products') }}" class="{% if not current_cat %}active{% endif %}">الكل</a>
+            {% for cat in categories %}
+            <a href="{{ url_for('admin_products', cat=cat.key) }}" class="{% if current_cat == cat.key %}active{% endif %}">
+                {{ cat.icon }} {{ cat.title }}
+            </a>
+            {% endfor %}
+        </div>
+
+        {% if products %}
+        <div style="overflow-x:auto;">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>الاسم</th>
+                        <th>القسم</th>
+                        <th>السعر</th>
+                        <th>الحالة</th>
+                        <th>إجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in products %}
+                    <tr>
+                        <td>{{ p.id }}</td>
+                        <td>{{ p.name }}</td>
+                        <td>{{ p.category_title }}</td>
+                        <td>{{ p.price }}</td>
+                        <td>
+                            {% if p.is_active %}
+                            <span class="badge badge-active">نشط</span>
+                            {% else %}
+                            <span class="badge badge-inactive">معطل</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="actions-cell">
+                                <a href="{{ url_for('admin_product_edit', product_id=p.id) }}" class="btn-sm">تعديل</a>
+                                <form action="{{ url_for('admin_product_toggle', product_id=p.id) }}" method="POST" style="display:inline;">
+                                    <button type="submit" class="btn-sm btn-outline">
+                                        {% if p.is_active %}تعطيل{% else %}تفعيل{% endif %}
+                                    </button>
+                                </form>
+                                <form action="{{ url_for('admin_product_delete', product_id=p.id) }}" method="POST" style="display:inline;"
+                                      onsubmit="return confirm('هل أنت متأكد من حذف هذا المنتج؟');">
+                                    <button type="submit" class="btn-sm btn-danger">حذف</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p>لا توجد منتجات.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

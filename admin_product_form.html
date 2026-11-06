@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}{% if product %}تعديل منتج{% else %}إضافة منتج{% endif %}{% endblock %}
+{% block content %}
+<div class="admin-layout">
+    <aside class="admin-sidebar">
+        <a href="{{ url_for('admin_dashboard') }}">📊 الرئيسية</a>
+        <a href="{{ url_for('admin_products') }}">📦 المنتجات</a>
+        <a href="{{ url_for('admin_offers') }}">🔥 العروض</a>
+        <a href="{{ url_for('admin_product_add') }}" class="{% if not product %}active{% endif %}">➕ إضافة منتج</a>
+        <hr style="border:none; border-top:1px solid #eee; margin:12px 0;">
+        <a href="{{ url_for('index') }}">🌐 عرض الموقع</a>
+        <a href="{{ url_for('admin_logout') }}" style="color:#c0392b;">🚪 تسجيل الخروج</a>
+    </aside>
+
+    <div class="admin-content">
+        <h2 style="margin-top:0; color:#0d3b22;">
+            {% if product %}تعديل المنتج{% else %}إضافة منتج جديد{% endif %}
+        </h2>
+
+        <form method="POST" style="max-width:500px;">
+            <div class="form-group">
+                <label>اسم المنتج *</label>
+                <input type="text" name="name" required class="form-control"
+                       value="{{ product.name if product else '' }}">
+            </div>
+            <div class="form-group">
+                <label>السعر *</label>
+                <input type="text" name="price" required class="form-control"
+                       value="{{ product.price if product else '' }}"
+                       placeholder="مثال: 4.50 د أو ابعث لمعرفة السعر">
+            </div>
+            <div class="form-group">
+                <label>القسم *</label>
+                <select name="category_id" required class="form-control">
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}"
+                        {% if product and product.category_id == cat.id %}selected{% endif %}>
+                        {{ cat.icon }} {{ cat.title }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>وصف (اختياري)</label>
+                <textarea name="description" class="form-control" rows="2">{{ product.description if product else '' }}</textarea>
+            </div>
+            <div class="form-group" style="margin:14px 0;">
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                    <input type="checkbox" name="is_active" value="1"
+                           {% if not product or product.is_active %}checked{% endif %}
+                           style="width:18px; height:18px;">
+                    المنتج نشط (يظهر في الموقع)
+                </label>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button type="submit" class="btn">
+                    {% if product %}حفظ التعديلات{% else %}إضافة المنتج{% endif %}
+                </button>
+                <a href="{{ url_for('admin_products') }}" class="btn btn-outline">إلغاء</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}إدارة العروض{% endblock %}
+{% block content %}
+<div class="admin-layout">
+    <aside class="admin-sidebar">
+        <a href="{{ url_for('admin_dashboard') }}">📊 الرئيسية</a>
+        <a href="{{ url_for('admin_products') }}">📦 المنتجات</a>
+        <a href="{{ url_for('admin_offers') }}" class="active">🔥 العروض</a>
+        <a href="{{ url_for('admin_product_add') }}">➕ إضافة منتج</a>
+        <hr style="border:none; border-top:1px solid #eee; margin:12px 0;">
+        <a href="{{ url_for('index') }}">🌐 عرض الموقع</a>
+        <a href="{{ url_for('admin_logout') }}" style="color:#c0392b;">🚪 تسجيل الخروج</a>
+    </aside>
+
+    <div class="admin-content">
+        <h2 style="margin-top:0; color:#0d3b22;">عروض العطور</h2>
+
+        <form method="POST" action="{{ url_for('admin_offer_add') }}" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:24px; align-items:flex-end;">
+            <div class="form-group" style="flex:1; min-width:180px; margin:0;">
+                <label>اسم العرض</label>
+                <input type="text" name="name" required class="form-control" placeholder="اسم العرض">
+            </div>
+            <div class="form-group" style="width:140px; margin:0;">
+                <label>السعر</label>
+                <input type="text" name="price" required class="form-control" placeholder="5.00 د">
+            </div>
+            <button type="submit" class="btn">إضافة</button>
+        </form>
+
+        {% if offers %}
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>العرض</th>
+                    <th>السعر</th>
+                    <th>إجراء</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for o in offers %}
+                <tr>
+                    <td>{{ o.id }}</td>
+                    <td>{{ o.name }}</td>
+                    <td>{{ o.price }}</td>
+                    <td>
+                        <form action="{{ url_for('admin_offer_delete', offer_id=o.id) }}" method="POST"
+                              onsubmit="return confirm('حذف هذا العرض؟');">
+                            <button type="submit" class="btn-sm btn-danger">حذف</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>لا توجد عروض حالياً.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

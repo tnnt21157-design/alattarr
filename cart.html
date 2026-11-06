@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}سلة المشتريات{% endblock %}
+{% block content %}
+<div class="cart-page">
+    <h2 class="section-title">🛒 سلة المشتريات</h2>
+
+    {% if cart_items %}
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>المنتج</th>
+                <th>السعر</th>
+                <th>الكمية</th>
+                <th>إجراء</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pid, item in cart_items.items() %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.price }}</td>
+                <td>
+                    <div class="qty-controls">
+                        <form action="{{ url_for('update_cart') }}" method="POST" style="display:inline">
+                            <input type="hidden" name="product_id" value="{{ pid }}">
+                            <input type="hidden" name="action" value="decrease">
+                            <button type="submit">−</button>
+                        </form>
+                        <span>{{ item.qty }}</span>
+                        <form action="{{ url_for('update_cart') }}" method="POST" style="display:inline">
+                            <input type="hidden" name="product_id" value="{{ pid }}">
+                            <input type="hidden" name="action" value="increase">
+                            <button type="submit">+</button>
+                        </form>
+                    </div>
+                </td>
+                <td>
+                    <form action="{{ url_for('update_cart') }}" method="POST">
+                        <input type="hidden" name="product_id" value="{{ pid }}">
+                        <input type="hidden" name="action" value="remove">
+                        <button type="submit" class="btn-sm btn-danger">حذف</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div style="margin-top:20px; display:flex; gap:12px; flex-wrap:wrap;">
+        <a href="{{ url_for('checkout') }}" class="btn">إتمام الطلب</a>
+        <a href="{{ url_for('index') }}" class="btn btn-outline">متابعة التسوق</a>
+    </div>
+    {% else %}
+    <div class="empty-cart">
+        <p style="font-size:1.2rem; margin-bottom:16px;">السلة فارغة حالياً</p>
+        <a href="{{ url_for('index') }}" class="btn">تصفح المنتجات</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

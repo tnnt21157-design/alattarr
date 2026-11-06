@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}محمص وبن العطار - الرئيسية{% endblock %}
+{% block content %}
+<section class="hero-section">
+    <h2>أهلاً بك في محمص وبن العطار</h2>
+    <p>أجود أنواع البهارات، الأعشاب الطبيعية، العطور المركبة، العسل الأصلي، والبقوليات</p>
+</section>
+
+<section>
+    <h3 class="section-title">أقسام المتجر</h3>
+    <div class="grid-container">
+        {% for cat in categories %}
+        <div class="card">
+            <h4>{{ cat.icon }} {{ cat.title }}</h4>
+            <p>{{ cat.description }}</p>
+            <a href="{{ url_for('category', cat_key=cat.key) }}" class="btn">تصفح القسم</a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% if offers %}
+<section class="offers-section">
+    <h3 class="section-title" style="border-color:#e67e22">🔥 عروض العطور المميزة</h3>
+    <ul>
+        {% for offer in offers %}
+        <li><strong>{{ offer.name }}:</strong> {{ offer.price }}</li>
+        {% endfor %}
+    </ul>
+</section>
+{% endif %}
+{% endblock %}

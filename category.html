@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ cat.title }} - محمص وبن العطار{% endblock %}
+{% block content %}
+<div class="category-page">
+    <h2 class="section-title">{{ cat.icon }} {{ cat.title }}</h2>
+
+    {% if products %}
+    <div class="items-grid">
+        {% for item in products %}
+        <div class="item-card">
+            <h4>{{ item.name }}</h4>
+            <p class="price-tag">{{ item.price }}</p>
+            <form action="{{ url_for('add_to_cart') }}" method="POST">
+                <input type="hidden" name="product_id" value="{{ item.id }}">
+                <input type="hidden" name="name" value="{{ item.name }}">
+                <input type="hidden" name="price" value="{{ item.price }}">
+                <input type="number" name="qty" value="1" min="1" max="99" class="qty-input" title="الكمية">
+                <button type="submit" class="btn-cart">أضف للسلة</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>لا توجد منتجات في هذا القسم حالياً.</p>
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('index') }}" class="btn btn-outline">العودة للرئيسية</a>
+</div>
+{% endblock %}

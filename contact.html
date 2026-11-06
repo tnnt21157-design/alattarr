@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}اتصل بنا - محمص وبن العطار{% endblock %}
+{% block content %}
+<div class="info-page">
+    <h2>اتصل بنا</h2>
+    <div class="contact-item">
+        <span>📱</span>
+        <span>واتساب / هاتف: <a href="https://wa.me/{{ whatsapp_number }}" target="_blank">078 161 1698</a></span>
+    </div>
+    <div class="contact-item">
+        <span>📍</span>
+        <span>الأردن</span>
+    </div>
+    <div class="contact-item">
+        <span>🕐</span>
+        <span>نخدمكم يومياً من 9 صباحاً حتى 9 مساءً</span>
+    </div>
+    <br>
+    <a href="https://wa.me/{{ whatsapp_number }}" target="_blank" class="btn btn-whatsapp">تواصل عبر واتساب</a>
+</div>
+{% endblock %}
